@@ -1,8 +1,9 @@
 #!/bin/bash
 
-# Este script permite especificar una tarea a realizar y se le pasa el parámetro y se crea
+# This script offers an interactive menu that the user can use to execute actions
+# # These actions include deleting files, folders, checking n commands of the log_file, etc.
 
-# Primero comprobamos que no se haya pasado ningún parámetro al ejecutar el script
+# We first ensure that no parameter was passed to the script when it was executed
 
 if [ $# -ne 0 ]
 then
@@ -14,19 +15,36 @@ fi
 
 
 # IDEAS
-# PARA CREATE/DELETE FILES se quiere mostrar el directorio actual y si el usuario añade un nombre
-# o borrar algún nombre, el contenido se borra
 # PARA EL LOG QUE PERMITA FILTRAR PARA POR EJEMPLO OBTENER LAS ULTIMAS 10 ACCIONES Y TAL
-#
+# AÑADIR OPCION DE NAVEGACION PARA IR AL DIRECTORIO DESEADO Y YA ALLI PODER MODIFICAR EL ARBOL
 #
 declare -a menu_options
 declare -i resultado_exec
 prev_file=".prev_dir_content.txt"
 cur_file=".updated_dir_content.txt"
+log_file="task_manager.log"
 resultado_exec=-1
 menu_options=("MODIFY FILE TREE" "BACKUP FILES(ZIP)" "OBTAIN PREVIOUS COMMANDS" "QUIT")
 PS3="Selected-Action: "
 QUIT=${menu_options[-1]}
+
+if [ ! -f "${log_file}" ]; then
+    # This means the log file does not exist, so we create it
+    touch "${log_file}"
+fi
+
+log_command(){
+    # This function has two params: [ACTION] affected_file
+    # It appends the given action and affected file to the log file
+    action="$1"
+    resource="$2"
+
+    # We print the action carried out with the associated date
+    echo  $(date '+%Y-%m-%d %H:%M:%S') [${action}] ${resource} >> "${log_file}"
+
+}
+
+
 
 check_updated_tree(){
     
@@ -37,6 +55,7 @@ check_updated_tree(){
             #If this first condition is met, this means that the file or directory
             # no longer exists, so we delete it
             rm -rf "$linea"
+            log_command "DELETE" "${linea}"
         fi
     done < ${prev_file}
 
@@ -49,13 +68,12 @@ check_updated_tree(){
                 if [[ ${linea:(-1)} == '/' ]]; then
                     # This means it is a directory, we create it without the /
                     mkdir -p "${linea%/}"
-                
+            
                 else
                     # This means it is a file
                     touch "$linea"
-                    
                 fi
-
+                log_command "CREATE" "${linea}"
             fi
     done < ${cur_file}
 
