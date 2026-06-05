@@ -25,28 +25,28 @@ The MODIFY FILE TREE also allows to create and delete directories in a very simi
 
 **To create a directory**, the user must write the desired name for the directory and end such name with a /. **IF IT DOES NOT END WITH A /, IT WILL BE CONSIDERED A FILE**.
 
-**To delete a directory**, it is done exactly in the same way as files, that is, deleting the entire name of the directory
+**To delete a directory**, it is done exactly in the same way as files, that is, deleting the entire name of the directory.
 
 ## 2. BACKUP FILES(ZIP)
 
-This options opens a text editor where the user can **specify the files they wish to be compressed**.
-The user can keep the file as it is to compress  all the files of the current working directory.
-Alternatively, if filesnames are deleted from the opened editor, those files will not be considered for the compression.
+This option opens a text editor where the user can **specify the files they wish to be compressed**.
+The user can keep the opened editor as it is to compress  all the files of the current working directory.
+Alternatively, if any filename is deleted from the opened editor, it will not be considered for the compression.
 The first editor considered is vi, if not, nano is used. If neither of them are available, an error message will be displayed.
 
-The generated ZIP file will be found within the directory where the script was executed from. **The ZIP file is called backup{number}.zip**
-This way, subsequent backups will not overwrite the previous ones.
+The generated ZIP file will be found within the original directory where the script was executed from. **The ZIP file is called backup{number}.zip**
+This way, subsequent backups will not be overwritten by previous ones.
 
 ## 3.OBTAIN PREVIOUS ACTIONS
 
-During the execution of the shell, a file called **task_manager.log** is generated and written upon. This file stores all the actions performed with the shell.
-This way the user can track which files and directories were deleted or created and when. Apart from being able to access this file manually by terminating the script's execution,
-the script provides an option to display the last n messages from said log file.
+During the execution of the shell, a file called **task_manager.log** is generated and written upon. This file stores all the actions performed with the script.
+This way the user can track which files and directories were deleted or created and when. Apart from being able to access this file manually(by for example using cat),
+the script provides an option to display the last n messages from said log file without exiting the script.
 
 ## 4. CHANGING SCRIPT'S WORKING DIRECTORY
 
 This option allows to move between directories of your device so that you can add and remove files/directories in any path. In this option, a menu is displayed
-with all the accessible directories from the current path. Then, after by specifying an number from the list, the script's working directory is moved to the new location.
+with all the accessible directories from the current path. Then, after by specifying a number from the list, the script's working directory is moved to the new location.
 
 ## 5. QUIT
 
