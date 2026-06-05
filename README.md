@@ -3,7 +3,7 @@ offered at the Universidad Carlos III de Madrid.
 
 # Explanation
 
-When executing this script, the user will be presented with a menu with 5 options.
+When executing this script, the user will be presented with a 5 option menu.
 
 ## 1. MODIFY FILE TREE
     
