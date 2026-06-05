@@ -3,6 +3,11 @@
 # This script offers an interactive menu that the user can use to execute actions
 # # These actions include deleting files, folders, checking n commands of the log_file, etc.
 
+# MORE IDEAS TO ADD
+# 1. RESTORE BACKUP -> LISTS ALL CURRENT BACKUPS AND ALLOWS TO RESTORE THE BACKUPS, RESOLVING FILES AND DIRECTORIES CONFLICTS
+# 2. RENAME FILES -> LISTS ALL FILES OF THE CURRENT DIRECTORIES AND ALLOWS YOU TO SELECT A SPECIFIC ONE AND INPUT THE NEW NAME
+
+
 # We first ensure that no parameter was passed to the script when it was executed
 
 if [ $# -ne 0 ]
