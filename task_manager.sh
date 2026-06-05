@@ -11,21 +11,13 @@ then
     exit 1
 fi
 
-# A continuacion mostramos al usuario las opciones que se pueden realizar
-
-
-# IDEAS
-# PARA EL LOG QUE PERMITA FILTRAR PARA POR EJEMPLO OBTENER LAS ULTIMAS 10 ACCIONES Y TAL
-# AÑADIR OPCION DE NAVEGACION PARA IR AL DIRECTORIO DESEADO Y YA ALLI PODER MODIFICAR EL ARBOL
-#
 declare -a menu_options
 declare -i resultado_exec
 prev_file=".prev_dir_content.txt"
 cur_file=".updated_dir_content.txt"
 log_file="task_manager.log"
 resultado_exec=-1
-menu_options=("MODIFY FILE TREE" "BACKUP FILES(ZIP)" "OBTAIN PREVIOUS COMMANDS" "QUIT")
-PS3="Selected-Action: "
+menu_options=("MODIFY FILE TREE" "BACKUP FILES(ZIP)" "OBTAIN PREVIOUS ACTIONS" "CHANGE WORKING DIRECTORY" "QUIT")
 QUIT=${menu_options[-1]}
 
 if [ ! -f "${log_file}" ]; then
@@ -33,7 +25,8 @@ if [ ! -f "${log_file}" ]; then
     touch "${log_file}"
 fi
 
-log_command(){
+log_command()
+{
     # This function has two params: [ACTION] affected_file
     # It appends the given action and affected file to the log file
     action="$1"
@@ -46,7 +39,8 @@ log_command(){
 
 
 
-check_updated_tree(){
+check_updated_tree()
+{
     
     # This first while is used to detect the files that were deleted
     while IFS= ;read -r linea; do
@@ -83,7 +77,8 @@ check_updated_tree(){
 
 
 
-handle_file_tree(){
+handle_file_tree()
+{
     
     # In this case, we create a file with the content of the current directory
     touch ${prev_file}
@@ -105,7 +100,55 @@ handle_file_tree(){
     fi    
 }
 
+handle_log_file_print()
+{
+    # In this case, we take wish the user to specify the amount of commands they wish to retrieve
+    number_commands=$(wc -l < ${log_file})
 
+    echo There are ${number_commands} registered in the log file
+    read -p "Introduce the number of commands you wish to retrieve: " user_input
+
+    while [ $user_input -gt $number_commands ];do
+        # We request a new number until the introduced value is within the range
+        echo The introduced number cannot be greater than the number of stored commands!
+        echo There are ${number_commands} registered in the log file.
+        read -p "Introduce the number of commands you wish to retrieve: " user_input
+    done
+
+    # We finally show the last user_input lines
+    tail -n ${user_input} "${log_file}"
+}
+
+handle_change_directory()
+{
+  declare -a current_directory_list
+  
+  # We obtain all the directories
+  current_directory_list=($(ls -p | grep '/'))
+  current_directory_list+=("." "..")
+  
+  # We print the found directories as a menu so the user can change between them
+  PS3="Select the directory to move to: ";COLUMNS=1; select dir in  ${current_directory_list[@]};
+  do
+      case $dir in
+      *)
+        cd ${dir}
+        echo Directory successfully changed
+        echo " "
+        echo Current Directory is ${PWD}
+        echo " "
+        break
+        ;;
+    esac
+done
+
+}
+
+echo " "
+echo The current directory is ${PWD}
+echo " "
+
+PS3="Select a number from the ACTION menu: "
 COLUMNS=1; select option in "${menu_options[@]}";
 do
     case $option in 
@@ -119,7 +162,15 @@ do
             # We call the function that handles the files
             handle_file_tree              
             ;;
-    esac
 
+        "OBTAIN PREVIOUS ACTIONS")
+            handle_log_file_print
+            ;;
+
+        "CHANGE WORKING DIRECTORY")
+            handle_change_directory
+            ;;
+    esac
+PS3="Select a number from the ACTION menu: "
 done
 
