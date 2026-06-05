@@ -12,11 +12,13 @@ then
 fi
 
 declare -a menu_options
-declare -i resultado_exec
 prev_file=".prev_dir_content.txt"
 cur_file=".updated_dir_content.txt"
-log_file="task_manager.log"
-resultado_exec=-1
+log_file="${PWD}/task_manager.log"
+zip_file=".file_to_zip"
+backup_file="${PWD}/backup"
+declare -i zip_file_id
+zip_file_id=0
 menu_options=("MODIFY FILE TREE" "BACKUP FILES(ZIP)" "OBTAIN PREVIOUS ACTIONS" "CHANGE WORKING DIRECTORY" "QUIT")
 QUIT=${menu_options[-1]}
 
@@ -95,7 +97,7 @@ handle_file_tree()
         nano "${cur_file}"
         check_updated_tree
     else
-        echo No text editor could be opened, returning to the option menu
+        echo No text editor could be opened, returning to the OPTION menu
     
     fi    
 }
@@ -132,6 +134,10 @@ handle_change_directory()
   do
       case $dir in
       *)
+        # We change the script's working directory
+        # The user can keep working with the script from another director
+        ## We change the script's working directory
+        #The user can keep working with the script from another directoryy
         cd ${dir}
         echo Directory successfully changed
         echo " "
@@ -141,6 +147,54 @@ handle_change_directory()
         ;;
     esac
 done
+PS3="Select a number from the OPTION menu: "
+
+}
+
+handle_backup_zip()
+{
+    # We follow a similar methodology to the creating and deleting files
+    # We show in a text editor the different folders and files and we just
+    # create the zip of the remaining names
+    
+    # We first check if the file exists. If it already does, we change
+    # the zip_file_id to avoid affecting the previous backups
+    if [ -f "${backup_file}${zip_file_id}.zip" ]; then
+        zip_file_id+=1
+    fi
+
+    ls -p -1 > "${zip_file}"
+    
+    # We display the contents to the user
+    if command -v vi > /dev/null; then
+
+        # If vi is installed it is opened with this editor
+        vi "${zip_file}"
+        select_to_compress_files
+
+    elif command -v nano > /dev/null; then
+        # If vi is not available, we try to open it with nano
+        nano "${zip_file}"
+        select_to_compress_files
+    
+    else
+        echo "No text editor could be opened, returning to the OPTION menu"
+    fi
+
+}
+
+select_to_compress_files()
+{
+    # This function was developed to ensure that only existing files
+    # from the current directory are compressed. In other words, that
+    # the user does not add a non existing file or directory during the editing.
+    # This way we avoid possible compressing issues
+    selected_files=$(grep -Fx -f <(ls -p -1) "${zip_file}")
+
+    # Once we have the files to compress we just execute the zip command
+    zip -r  "${backup_file}${zip_file_id}.zip" $(echo "$selected_files" | tr '\n' ' ')
+    rm -f "${zip_file}"
+    log_command "BACKUP" "${backup_file}${zip_file_id}.zip"
 
 }
 
@@ -148,7 +202,7 @@ echo " "
 echo The current directory is ${PWD}
 echo " "
 
-PS3="Select a number from the ACTION menu: "
+PS3="Select a number from the OPTION menu: "
 COLUMNS=1; select option in "${menu_options[@]}";
 do
     case $option in 
@@ -167,10 +221,13 @@ do
             handle_log_file_print
             ;;
 
+        "BACKUP FILES(ZIP)")
+            handle_backup_zip
+            ;;
+
         "CHANGE WORKING DIRECTORY")
             handle_change_directory
             ;;
     esac
-PS3="Select a number from the ACTION menu: "
 done
 
