@@ -19,7 +19,7 @@ zip_file=".file_to_zip"
 backup_file="${PWD}/backup"
 declare -i zip_file_id
 zip_file_id=0
-menu_options=("MODIFY FILE TREE" "BACKUP FILES(ZIP)" "OBTAIN PREVIOUS ACTIONS" "CHANGE WORKING DIRECTORY" "QUIT")
+menu_options=("MODIFY FILE TREE" "BACKUP FILES(ZIP)" "OBTAIN PREVIOUS ACTIONS" "CHANGE SCRIPT'S WORKING DIRECTORY" "QUIT")
 QUIT=${menu_options[-1]}
 
 if [ ! -f "${log_file}" ]; then
@@ -63,13 +63,17 @@ check_updated_tree()
                 
                 if [[ ${linea:(-1)} == '/' ]]; then
                     # This means it is a directory, we create it without the /
-                    mkdir -p "${linea%/}"
+                    mkdir -p "${linea%/}" 2>/dev/null
             
                 else
                     # This means it is a file
-                    touch "$linea"
+                    touch "$linea" 2>/dev/null
                 fi
-                log_command "CREATE" "${linea}"
+                
+                # We only register the command if the previous touch command was executed with no errors
+                if [ $? -eq 0 ];then
+                    log_command "CREATE" "${linea}"
+                fi
             fi
     done < ${cur_file}
 
@@ -225,7 +229,7 @@ do
             handle_backup_zip
             ;;
 
-        "CHANGE WORKING DIRECTORY")
+        "CHANGE SCRIPT'S WORKING DIRECTORY")
             handle_change_directory
             ;;
     esac
