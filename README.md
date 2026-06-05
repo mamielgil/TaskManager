@@ -1,4 +1,4 @@
-This is a script was developed as a final project for Microcredencial Universitaria Programación de la Shell de Linux, a course
+This is a script that was developed as a final project for Microcredencial Universitaria Programación de la Shell de Linux, a course
 offered at the Universidad Carlos III de Madrid.
 
 # Explanation
