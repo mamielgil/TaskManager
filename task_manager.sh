@@ -5,8 +5,6 @@
 
 # MORE IDEAS TO ADD
 # 1. RESTORE BACKUP -> LISTS ALL CURRENT BACKUPS AND ALLOWS TO RESTORE THE BACKUPS, RESOLVING FILES AND DIRECTORIES CONFLICTS
-# 2. RENAME FILES -> LISTS ALL FILES OF THE CURRENT DIRECTORIES AND ALLOWS YOU TO SELECT A SPECIFIC ONE AND INPUT THE NEW NAME
-
 
 # We first ensure that no parameter was passed to the script when it was executed
 
@@ -24,7 +22,7 @@ zip_file=".file_to_zip"
 backup_file="${PWD}/backup"
 declare -i zip_file_id
 zip_file_id=0
-menu_options=("MODIFY FILE TREE" "BACKUP FILES(ZIP)" "OBTAIN PREVIOUS ACTIONS" "CHANGE SCRIPT'S WORKING DIRECTORY" "QUIT")
+menu_options=("MODIFY FILE TREE" "BACKUP FILES(ZIP)" "OBTAIN PREVIOUS ACTIONS" "CHANGE SCRIPT'S WORKING DIRECTORY" "RENAME FILE" "QUIT")
 QUIT=${menu_options[-1]}
 
 if [ ! -f "${log_file}" ]; then
@@ -207,6 +205,47 @@ select_to_compress_files()
 
 }
 
+handle_rename_file()
+{
+# We are going to list all the files of the current directory and then, the user will be asked for a name
+# if the name matches any of the existing files, the user will be asked again about a new name. If not an error
+# will be displayed. Moreover, we are going to allow renaming without being able to change the extension of the file
+
+# First we list all the files of the current directory. We show all the elements of the script's working directory. We remove
+# the entries with a slash so that only files are displayed
+files_current_directory="$(ls -p | grep -v '/')"
+
+echo "${files_current_directory}"
+
+# We store the file specified by the user
+read -r  -p "Introduce the file (including extension) you wish to rename/Introduce -1 to abort: " user_input
+echo " "
+
+while [ ! -f "${user_input}" ] && [ "${user_input}" != "-1" ];do
+    # This means the file does not exist
+    echo The introduced file was incorrect, try again!
+    echo " "
+    read -r -p "Introduce the file (including extension) you wish to rename/Introduce -1 to abort: " user_input
+done
+
+if [ ${user_input} = "-1" ];then
+    echo Aborting the renaming operation!
+    echo " "
+
+else
+    # We store the extension of the file to be renamed
+    file_to_rename_extension=${user_input##*.}
+    echo The previous filename was: ${user_input}
+    read -r -p "Please introduce a new name (without including the extension): " new_name
+
+    # We rename the file with the user-specified name and keep the original extension
+    mv "${user_input}" "${new_name}.${file_to_rename_extension}"
+
+
+fi
+
+}
+
 echo " "
 echo The current directory is ${PWD}
 echo " "
@@ -236,6 +275,10 @@ do
 
         "CHANGE SCRIPT'S WORKING DIRECTORY")
             handle_change_directory
+            ;;
+
+        "RENAME FILE")
+            handle_rename_file
             ;;
     esac
 done
