@@ -48,7 +48,13 @@ the script provides an option to display the last n messages from said log file 
 This option allows to move between directories of your device so that you can add and remove files/directories in any path. In this option, a menu is displayed
 with all the accessible directories from the current path. Then, after by specifying a number from the list, the script's working directory is moved to the new location.
 
-## 5. QUIT
+## 5. RENAME FILE
+
+This option allows the user to rename a file of the script's current working directory without modifying the file's extension. The user is presented with  all the files of the directory.
+Then, they are asked to introduce the exact name of the file (including the extension) they wish to rename. Afterwards, they are prompted for a new name. The file will be renamed
+with the specified string while keeping the original extension at the end. To abort the renaming, -1 must be specified within the filename selection prompt.
+
+## 6. QUIT
 
 This option is used to terminate the execution of the script. When the number 5 is inputted within the options menu, the script finishes.
 
