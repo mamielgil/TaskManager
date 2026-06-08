@@ -33,10 +33,12 @@ The MODIFY FILE TREE also allows to create and delete directories in a very simi
 
 
 ![Creating_example](assets/CREATING_FILES_DIRS.gif)
+
 **Example creating a file and a directory**
 
 
 ![Deleting_example](assets/DELETING_FILES_DIRS.gif)
+
 **Example deleting a file and a directory**
 
 ## 2. BACKUP FILES(ZIP)
