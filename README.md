@@ -17,9 +17,11 @@ Within the text editor, the user can modify the current files and directories by
 **To create a file**, the user must write the desired filename in a new line of the editor and then save the changes.
 The script detects that a new name was added and creates a new file for it.
 
+
 **To delete a file**, the user must delete the entire name of the filename. The script detects that there is a missing filename and it deletes it from the directory.
 **CAREFUL**, if a folder/filename is changed it will also be considered as a new file/directory so the original one will be deleted and replaced by the new name. All the 
 contents will be lost.
+
 
 ### Creating and deleting directories
 
@@ -28,6 +30,14 @@ The MODIFY FILE TREE also allows to create and delete directories in a very simi
 **To create a directory**, the user must write the desired name for the directory and end such name with a /. **IF IT DOES NOT END WITH A /, IT WILL BE CONSIDERED A FILE**.
 
 **To delete a directory**, it is done exactly in the same way as files, that is, deleting the entire name of the directory.
+
+
+![Creating_example](assets/CREATING_FILES_DIRS.gif)
+**Example creating a file and a directory**
+
+
+![Deleting_example](assets/DELETING_FILES_DIRS.gif)
+**Example deleting a file and a directory**
 
 ## 2. BACKUP FILES(ZIP)
 
