@@ -243,18 +243,30 @@ if [ ${user_input} = "-1" ];then
 else
     # We store the extension of the file to be renamed
     file_to_rename_extension=${user_input##*.}
+   
+   # If there was no extension, we set the variable to an empty string
+    if [ "${file_to_rename_extension}" = "${user_input}" ]; then
+        file_to_rename_extension=""
+    fi
+    
     echo The previous filename was: ${user_input}
-    read -r -p "Please introduce a new name (without including the extension): " new_name
+    read -r -p "Please introduce a new name (without including the extension, if it exists): " new_name
     
     while [ -z "${new_name}" ]; do
         echo A non empty name must be specified
         read -r -p "Please introduce a new name (without including the extension): " new_name
     done
 
-    # We rename the file with the user-specified name and keep the original extension
-    mv "${user_input}" "${new_name}.${file_to_rename_extension}"
-    log_command "RENAME FILE" "${user_input} -> ${new_name}.${file_to_rename_extension}"
-
+    # We perform the same operation but with different params depending on whether the file had an extension or not
+    if [ -z "${file_to_rename_extension}" ]; then
+        
+       mv "${user_input}" "${new_name}"
+        log_command "RENAME FILE" "${user_input} -> ${new_name}"
+    
+    else
+        mv "${user_input}" "${new_name}.${file_to_rename_extension}"
+        log_command "RENAME FILE" "${user_input} -> ${new_name}.${file_to_rename_extension}"
+    fi
 fi
 
 }
@@ -347,7 +359,8 @@ else
         # We cleanup the temporary directory
         rm -rf "${temp_dir}"
     done
-    echo "Backup completed. Backups which were successfully applied at USED dir. Retrieved contents at RECOVERED_CONTENTS folder" 
+    echo Backup completed. Backups which were successfully applied at USED dir.
+    echo Retrieved contents at RESTORED_CONTENTS folder 
 
 fi
 
