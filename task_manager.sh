@@ -149,8 +149,6 @@ handle_change_directory()
       *)
         # We change the script's working directory
         # The user can keep working with the script from another director
-        ## We change the script's working directory
-        #The user can keep working with the script from another directoryy
         cd "${dir}"
         echo Directory successfully changed
         echo " "
