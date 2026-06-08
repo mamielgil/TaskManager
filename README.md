@@ -52,6 +52,7 @@ The generated ZIP file will be found within the original directory where the scr
 This way, subsequent backups will not be overwritten by previous ones.
 
 ![Backing_up_files_example](assets/ZIPPING_FILES.gif)
+
 **Example of backing up file{1..7}.txt and showing that the backup correctly stores the data**
 
 ## 3.RESTORE BACKUPS
@@ -64,6 +65,7 @@ were successfully used, are moved into the USED folder**. By checking this folde
 **Considering backup0 created in the previous section and a later backup with the same filenames but that is more recent.**
 
 ![Restoring_backup_example](assets/RESTORING_BACKUP.gif)
+
 **Restoring two backups which contain the same files but with different dates. Only the newest copies are retrieved(found in RESTORED_CONTENT/) and the applied backups are stored within USED/**
 
 ## 4.OBTAIN PREVIOUS ACTIONS
@@ -74,12 +76,15 @@ the script provides an option to display the last n messages from said log file 
 
 ![log_file_retrieval_example](assets/LOG_FILE_RETRIEVAL.gif)
 
+**Example of retrieving 8 actions from the log file**
+
 ## 5. CHANGING SCRIPT'S WORKING DIRECTORY
 
 This option allows to move between directories of your device so that you can add and remove files/directories in any path. In this option, a menu is displayed
 with all the accessible directories from the current path. Then, after by specifying a number from the list, **the script's working directory is moved to the new location**.
 
 ![Changing_directory_example](assets/CHANGING_DIR.gif)
+
 **Example of changing the script's working directory to PRUEBA/**
 
 ## 6. RENAME FILE
@@ -89,6 +94,7 @@ Then, they are asked to introduce the exact name of the file (including the exte
 with the specified string while keeping the original extension at the end.**To abort the renaming, -1 must be specified within the filename selection prompt**.
 
 ![Renaming_file_example](assets/RENAMING_FILE.gif)
+
 **Example, renaming a file from original_name.invented_extension to new_name.invented_extension**
 
 ## 7. QUIT
