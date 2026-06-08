@@ -360,7 +360,7 @@ else
         rm -rf "${temp_dir}"
     done
     echo Backup completed. Backups which were successfully applied at USED dir.
-    echo Retrieved contents at RESTORED_CONTENTS folder 
+    echo Retrieved contents at RESTORED_CONTENT folder 
 
 fi
 
